@@ -1,5 +1,5 @@
+#include "util.hpp"
 #include <algorithm>
-#include <fstream>
 #include <iostream>
 #include <limits>
 #include <optional>
@@ -8,18 +8,6 @@
 #include <vector>
 
 using namespace std;
-
-vector<string> read_file(const char *filename) {
-    vector<string> lines;
-    ifstream ifile(filename);
-    string line;
-
-    while (getline(ifile, line)) {
-        lines.push_back(line);
-    }
-
-    return lines;
-}
 
 void part1(vector<string> &lines) {
     int sum = 0;
@@ -38,17 +26,17 @@ void part1(vector<string> &lines) {
 }
 void part2(vector<string> &lines) {
     const size_t STR_DIGIT_SIZE = 10;
-    string_view STR_DIGITS[STR_DIGIT_SIZE]{"",      "one",  "two", "three",
-                                           "four",  "five", "six", "seven",
-                                           "eight", "nine"};
+    const string_view STR_DIGITS[STR_DIGIT_SIZE]{
+        "zero", "one", "two",   "three", "four",
+        "five", "six", "seven", "eight", "nine"};
     const size_t SIZE_TMAX = numeric_limits<size_t>::max();
 
-    int sum = 0;
-    auto is_digit = [](char c) { return isdigit(c); };
     auto find_digit = [=](string_view line, int idx) -> optional<size_t> {
         if (isdigit(line[idx])) {
             return (size_t)(line[idx] - '0');
         }
+        // Search digit as string
+        // Zero is not an option in this problem
         for (size_t j = 1; j < STR_DIGIT_SIZE; j++) {
             string_view cur = line.substr(idx, STR_DIGITS[j].size());
             if (cur == STR_DIGITS[j]) {
@@ -58,19 +46,24 @@ void part2(vector<string> &lines) {
         return {};
     };
 
+    int sum = 0;
+
     for (string_view line : lines) {
         int num = 0;
         optional<size_t> digit1;
         optional<size_t> digit2;
 
+        // Find forward
         for (int i = 0; i < line.size() && !digit1; i++) {
             digit1 = find_digit(line, i);
         }
 
+        // Find backward
         for (int i = line.size() - 1; i >= 0 && !digit2; i--) {
             digit2 = find_digit(line, i);
         }
 
+        // Add if found
         if (digit1) {
             sum += digit1.value() * 10 + digit2.value();
         }
