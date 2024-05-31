@@ -39,19 +39,19 @@ void part1(const vector<string> &lines) {
         // -h^2 + th - d < 0
         // h1 < ways to win < h2
         double delta = pow(item.time, 2) - 4 * item.rec;
-        double sol1 = (item.time + sqrt(delta)) / 2;
-        double sol2 = (item.time - sqrt(delta)) / 2;
-        double round1 = floor(sol1);
-        double round2 = ceil(sol2);
+        double sol1 = (item.time - sqrt(delta)) / 2;
+        double sol2 = (item.time + sqrt(delta)) / 2;
+        double round1 = ceil(sol1);
+        double round2 = floor(sol2);
 
         if (sol1 == round1) {
-            round1 -= 1;
+            round1 += 1;
         }
         if (sol2 == round2) {
-            round2 += 1;
+            round2 -= 1;
         }
 
-        int count = round1 - round2 + 1;
+        int count = round2 - round1 + 1;
         result *= count;
     }
 
@@ -81,19 +81,19 @@ void part2(const vector<string> &lines) {
 
     // Same as part 1
     double delta = pow(data.time, 2) - 4 * data.rec;
-    double sol1 = (data.time + sqrt(delta)) / 2;
-    double sol2 = (data.time - sqrt(delta)) / 2;
-    double round1 = floor(sol1);
-    double round2 = ceil(sol2);
+    double sol2 = (data.time + sqrt(delta)) / 2;
+    double sol1 = (data.time - sqrt(delta)) / 2;
+    double round2 = floor(sol2);
+    double round1 = ceil(sol1);
 
     if (sol1 == round1) {
-        round1 -= 1;
+        round1 += 1;
     }
     if (sol2 == round2) {
-        round2 += 1;
+        round2 -= 1;
     }
 
-    unsigned count = round1 - round2 + 1;
+    unsigned count = round2 - round1 + 1;
 
     cout << "Part 2: " << count << endl;
 }
